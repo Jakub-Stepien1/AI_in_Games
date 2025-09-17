@@ -1,7 +1,4 @@
-/// <summary>
-/// author Pete Lowe May 2025
-/// you need to change the above line or lose marks
-/// </summary>
+//Name: Jakub Stepien
 
 
 #include "Game.h"
