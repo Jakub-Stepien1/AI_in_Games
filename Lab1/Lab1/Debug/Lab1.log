@@ -1,0 +1,27 @@
+﻿  Player.cpp
+C:\SFML-3.0.0\include\SFML\System\Exception.hpp(41,47): warning C4275: non dll-interface class 'std::runtime_error' used as base for dll-interface class 'sf::Exception'
+  (compiling source file 'Player.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\stdexcept(100,30):
+      see declaration of 'std::runtime_error'
+      C:\SFML-3.0.0\include\SFML\System\Exception.hpp(41,23):
+      see declaration of 'sf::Exception'
+  
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(5,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(8,15): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(26,42): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(26,42): warning C4244:         with
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(26,42): warning C4244:         [
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(26,42): warning C4244:             T=float
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(26,42): warning C4244:         ]
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(27,42): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(27,42): warning C4244:         with
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(27,42): warning C4244:         [
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(27,42): warning C4244:             T=float
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(27,42): warning C4244:         ]
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(34,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(22,30): warning C4100: 't_deltaTime': unreferenced parameter
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(51,17): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(54,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(59,17): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Lab1\Player.cpp(62,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  Lab1.vcxproj -> C:\Users\Ninja\Desktop\College\Year 4\AI in Games\Lab1\Debug\Lab1.exe
