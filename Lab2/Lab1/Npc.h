@@ -10,13 +10,17 @@ class Npc
 private:
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
-
 	sf::CircleShape m_circle;
+
+	sf::Font m_font;
+	sf::Text m_text;
+
 	sf::Vector2f m_position;
-	int m_direction;
 	float m_rotation;
 	float m_speed;
 	sf::Vector2f m_velocity;
+	bool m_active;
+	bool m_isKeyHeld;
 
 	std::unique_ptr<Behaviour> m_behaviour;
 
@@ -27,5 +31,6 @@ public:
 	void draw(sf::RenderWindow& t_window);
 
 	void checkBoundary();
+
 	void setBehaviour(std::unique_ptr<Behaviour> t_behaviour);
 };
