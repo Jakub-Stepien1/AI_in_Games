@@ -19,20 +19,26 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 	int yPos = rand() % 600 + 1;
 	m_position = sf::Vector2f(xPos, yPos);
 
-	m_speed = 2.0f;
-	m_velocity = sf::Vector2f(0.0f, 0.0f);
-	
-	m_active = false;
-	m_isKeyHeld = false;
-
 	switch (m_behaviour->getKey())
 	{
 	case sf::Keyboard::Key::Num1:
 		m_text.setString("Seek");
 		break;
+	case sf::Keyboard::Key::Num2:
+		m_text.setString("Arrive Slow");
+		break;
+	case sf::Keyboard::Key::Num3:
+		m_text.setString("Arrive Fast");
+		break;
 	default:
 		break;
 	}
+
+	m_speed = 2.0f;
+	m_velocity = sf::Vector2f(0.0f, 0.0f);
+
+	m_active = false;
+	m_isKeyHeld = false;
 
 	m_text.setCharacterSize(16);
 	m_text.setFillColor(sf::Color::Black);
@@ -65,7 +71,10 @@ void Npc::update(sf::Vector2f t_playerPos)
 		m_circle.setPosition(m_position);
 		m_text.setPosition(sf::Vector2f(m_position.x, m_position.y + 40.0f));
 
-		m_rotation = atan2(m_velocity.y, m_velocity.x) * 180.0f / M_PI;
+		sf::Vector2f facePlayer = t_playerPos - m_position;
+		facePlayer = facePlayer.normalized();
+
+		m_rotation = atan2(facePlayer.y, facePlayer.x) * 180.0f / M_PI;
 		m_sprite.setRotation(sf::Angle(sf::degrees(m_rotation)));
 	}
 	if (!sf::Keyboard::isKeyPressed(m_behaviour->getKey()))

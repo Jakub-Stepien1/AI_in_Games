@@ -48,6 +48,8 @@ private:
 
 	Player m_player;
 	Npc m_seekNpc;
+	Npc m_arriveSlowNpc;
+	Npc m_arriveFastNpc;
 
 };
 
