@@ -12,7 +12,8 @@
 /// </summary>
 Game::Game() :
 	m_window{ sf::VideoMode{ sf::Vector2u{800U, 600U}, 32U }, "SFML Game 3.0" },
-	m_DELETEexitGame{false} //when true game will exit
+	m_DELETEexitGame{false}, //when true game will exit
+	m_seekNpc(std::make_unique<Seek>())
 {
 	setupTexts(); // load font 
 	setupSprites(); // load texture
@@ -113,7 +114,7 @@ void Game::update(sf::Time t_deltaTime)
 	}
 
 	m_player.update(t_deltaTime);
-	m_npc.update();
+	m_seekNpc.update(m_player.getPosition());
 }
 
 /// <summary>
@@ -123,7 +124,7 @@ void Game::render()
 {
 	m_window.clear(sf::Color::White);
 
-	m_npc.draw(m_window);
+	m_seekNpc.draw(m_window);
 	m_player.draw(m_window);
 	
 	m_window.display();

@@ -1,6 +1,9 @@
 #pragma once
+#define _USE_MATH_DEFINES
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Behaviour.h"
+#include "math.h"
 
 class Npc
 {
@@ -13,12 +16,16 @@ private:
 	int m_direction;
 	float m_rotation;
 	float m_speed;
+	sf::Vector2f m_velocity;
+
+	std::unique_ptr<Behaviour> m_behaviour;
 
 public:
-	Npc();
+	Npc(std::unique_ptr<Behaviour> t_behaviour);
 
-	void update();
+	void update(sf::Vector2f t_playerPos);
 	void draw(sf::RenderWindow& t_window);
 
 	void checkBoundary();
+	void setBehaviour(std::unique_ptr<Behaviour> t_behaviour);
 };

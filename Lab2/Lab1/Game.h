@@ -16,6 +16,7 @@
 #include <SFML/Audio.hpp>
 #include "Player.h"
 #include "Npc.h"
+#include "Behaviour.h"
 
 
 const sf::Color ULTRAMARINE{ 5, 55,242,255 }; // const colour
@@ -46,7 +47,7 @@ private:
 	bool m_DELETEexitGame; // control exiting game
 
 	Player m_player;
-	Npc m_npc;
+	Npc m_seekNpc;
 
 };
 

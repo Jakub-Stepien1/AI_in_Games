@@ -25,4 +25,6 @@ public:
 
 	void checkInputs();
 	void checkBoundary();
+
+	sf::Vector2f getPosition();
 };

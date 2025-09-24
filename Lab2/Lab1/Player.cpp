@@ -102,3 +102,8 @@ void Player::checkBoundary()
 		m_position.y = 620;
 	}
 }
+
+sf::Vector2f Player::getPosition()
+{
+	return m_position;
+}

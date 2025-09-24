@@ -6,10 +6,15 @@
 class Behaviour
 {
 public:
-	virtual sf::Vector2f getSteering() = 0;
+	virtual sf::Vector2f getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos) = 0;
 };
 
-class Wander : Behaviour
+class Seek : public Behaviour
 {
-	virtual sf::Vector2f getSteering() override;
+	virtual sf::Vector2f getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos) override;
+};
+
+class Wander : public Behaviour
+{
+	virtual sf::Vector2f getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos) override;
 };
