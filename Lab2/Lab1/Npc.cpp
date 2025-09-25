@@ -33,6 +33,9 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 	case sf::Keyboard::Key::Num4:
 		m_text.setString("Wander");
 		break;
+	case sf::Keyboard::Key::Num5:
+		m_text.setString("Pursue");
+		break;
 	default:
 		break;
 	}
@@ -56,7 +59,7 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 	m_sprite.setPosition(m_position);
 }
 
-void Npc::update(sf::Vector2f t_playerPos)
+void Npc::update(sf::Vector2f t_playerPos, sf::Vector2f t_playerVelocity)
 {
 	if (sf::Keyboard::isKeyPressed(m_behaviour->getKey()) && !m_isKeyHeld)
 	{
@@ -67,7 +70,7 @@ void Npc::update(sf::Vector2f t_playerPos)
 	{
 		m_rotation = m_sprite.getRotation().asDegrees();
 
-		m_velocity = m_behaviour->getSteering(m_position, t_playerPos, m_rotation) * m_speed;
+		m_velocity = m_behaviour->getSteering(m_position, t_playerPos, m_rotation, m_velocity, t_playerVelocity) * m_speed;
 		m_position += m_velocity;
 
 		checkBoundary();

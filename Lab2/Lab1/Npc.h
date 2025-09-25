@@ -27,7 +27,7 @@ private:
 public:
 	Npc(std::unique_ptr<Behaviour> t_behaviour);
 
-	void update(sf::Vector2f t_playerPos);
+	void update(sf::Vector2f t_playerPos, sf::Vector2f t_playerVelocity);
 	void draw(sf::RenderWindow& t_window);
 
 	void checkBoundary();

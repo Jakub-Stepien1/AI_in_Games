@@ -15,6 +15,7 @@ private:
 	sf::Vector2f m_position;
 	int m_rotation;
 	float m_speed;
+	sf::Vector2f m_velocity;
 
 
 public:
@@ -27,4 +28,5 @@ public:
 	void checkBoundary();
 
 	sf::Vector2f getPosition();
+	sf::Vector2f getVelocity();
 };

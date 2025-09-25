@@ -11,6 +11,7 @@ Player::Player() :
 
 	std::cout << "x: " << m_sprite.getOrigin().x << " | y: " << m_sprite.getOrigin().y;
 
+	m_velocity = sf::Vector2f(0.0f, 0.0f);
 	m_speed = 0.0f;
 	m_rotation = 0.0f;
 	m_position = sf::Vector2f(100.0f, 100.0f);
@@ -30,8 +31,9 @@ void Player::update(sf::Time t_deltaTime)
 {
 	checkInputs();
 
-	m_position.x = m_circle.getPosition().x + cos(m_rotation * (M_PI / 180.0f)) * m_speed;
-	m_position.y = m_circle.getPosition().y + sin(m_rotation * (M_PI / 180.0f)) * m_speed;
+	m_velocity = sf::Vector2f(cos(m_rotation * (M_PI / 180.0f)), sin(m_rotation * (M_PI / 180.0f))) * m_speed;
+
+	m_position = m_circle.getPosition() + m_velocity;
 
 	checkBoundary();
 
@@ -106,4 +108,9 @@ void Player::checkBoundary()
 sf::Vector2f Player::getPosition()
 {
 	return m_position;
+}
+
+sf::Vector2f Player::getVelocity()
+{
+	return m_velocity;
 }

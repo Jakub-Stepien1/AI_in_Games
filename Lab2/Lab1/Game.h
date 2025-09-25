@@ -51,6 +51,7 @@ private:
 	Npc m_arriveSlowNpc;
 	Npc m_arriveFastNpc;
 	Npc m_wanderNpc;
+	Npc m_pursueNpc;
 
 };
 
