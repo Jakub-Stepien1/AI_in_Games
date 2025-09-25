@@ -47,7 +47,6 @@ void Player::update(sf::Time t_deltaTime)
 
 	m_front.setRotation(sf::Angle(sf::degrees(m_rotation)));
 	m_sprite.setRotation(sf::Angle(sf::degrees(m_rotation)));
-	//std::cout << m_rotation << std::endl;
 }
 
 void Player::draw(sf::RenderWindow& t_window)

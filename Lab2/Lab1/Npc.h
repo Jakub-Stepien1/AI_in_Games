@@ -23,6 +23,11 @@ private:
 	bool m_active;
 	bool m_isKeyHeld;
 
+	float m_visionAngle;
+	float m_visionLength;
+	float m_leftAngle;
+	float m_rightAngle;
+
 	std::unique_ptr<Behaviour> m_behaviour;
 
 public:
@@ -33,6 +38,7 @@ public:
 
 	void checkBoundary();
 	void updateVisionCone();
+	bool isPlayerInVisionCone(sf::Vector2f t_playerPos);
 
 	void setBehaviour(std::unique_ptr<Behaviour> t_behaviour);
 };
