@@ -15,7 +15,8 @@ Game::Game() :
 	m_DELETEexitGame{false}, //when true game will exit
 	m_seekNpc(std::make_unique<Seek>()),
 	m_arriveSlowNpc(std::make_unique<ArriveSlow>()),
-	m_arriveFastNpc(std::make_unique<ArriveFast>())
+	m_arriveFastNpc(std::make_unique<ArriveFast>()),
+	m_wanderNpc(std::make_unique<Wander>())
 {
 	setupTexts(); // load font 
 	setupSprites(); // load texture
@@ -120,6 +121,7 @@ void Game::update(sf::Time t_deltaTime)
 	m_seekNpc.update(m_player.getPosition());
 	m_arriveSlowNpc.update(m_player.getPosition());
 	m_arriveFastNpc.update(m_player.getPosition());
+	m_wanderNpc.update(m_player.getPosition());
 }
 
 /// <summary>
@@ -132,6 +134,7 @@ void Game::render()
 	m_seekNpc.draw(m_window);
 	m_arriveSlowNpc.draw(m_window);
 	m_arriveFastNpc.draw(m_window);
+	m_wanderNpc.draw(m_window);
 
 	m_player.draw(m_window);
 	

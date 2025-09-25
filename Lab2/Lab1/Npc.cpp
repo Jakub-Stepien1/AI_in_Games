@@ -30,6 +30,9 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 	case sf::Keyboard::Key::Num3:
 		m_text.setString("Arrive Fast");
 		break;
+	case sf::Keyboard::Key::Num4:
+		m_text.setString("Wander");
+		break;
 	default:
 		break;
 	}
@@ -62,7 +65,9 @@ void Npc::update(sf::Vector2f t_playerPos)
 	}
 	if (m_active)
 	{
-		m_velocity = m_behaviour->getSteering(m_position, t_playerPos) * m_speed;
+		m_rotation = m_sprite.getRotation().asDegrees();
+
+		m_velocity = m_behaviour->getSteering(m_position, t_playerPos, m_rotation) * m_speed;
 		m_position += m_velocity;
 
 		checkBoundary();
@@ -71,10 +76,10 @@ void Npc::update(sf::Vector2f t_playerPos)
 		m_circle.setPosition(m_position);
 		m_text.setPosition(sf::Vector2f(m_position.x, m_position.y + 40.0f));
 
-		sf::Vector2f facePlayer = t_playerPos - m_position;
-		facePlayer = facePlayer.normalized();
+		//sf::Vector2f facePlayer = t_playerPos - m_position;
+		//facePlayer = facePlayer.normalized();
 
-		m_rotation = atan2(facePlayer.y, facePlayer.x) * 180.0f / M_PI;
+		//m_rotation = atan2(facePlayer.y, facePlayer.x) * 180.0f / M_PI;
 		m_sprite.setRotation(sf::Angle(sf::degrees(m_rotation)));
 	}
 	if (!sf::Keyboard::isKeyPressed(m_behaviour->getKey()))
