@@ -9,14 +9,14 @@ class Player
 private:
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
-
 	sf::CircleShape m_circle;
 	sf::CircleShape m_front;
+	sf::ConvexShape m_visionCone;
+	
 	sf::Vector2f m_position;
 	int m_rotation;
 	float m_speed;
 	sf::Vector2f m_velocity;
-
 
 public:
 	Player();
@@ -26,6 +26,7 @@ public:
 
 	void checkInputs();
 	void checkBoundary();
+	void updateVisionCone();
 
 	sf::Vector2f getPosition();
 	sf::Vector2f getVelocity();

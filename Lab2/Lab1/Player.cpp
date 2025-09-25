@@ -9,8 +9,6 @@ Player::Player() :
 	m_sprite.setOrigin(sf::Vector2f(304.5f, 410.0f));
 	m_sprite.setScale(sf::Vector2f(0.1f, 0.1f));
 
-	std::cout << "x: " << m_sprite.getOrigin().x << " | y: " << m_sprite.getOrigin().y;
-
 	m_velocity = sf::Vector2f(0.0f, 0.0f);
 	m_speed = 0.0f;
 	m_rotation = 0.0f;
@@ -25,6 +23,11 @@ Player::Player() :
 	m_front.setOrigin(sf::Vector2f(-25.0f, 5.0f));
 	m_front.setFillColor(sf::Color::Blue);
 	m_front.setPosition(m_position);
+
+	m_visionCone.setPointCount(3);
+	m_visionCone.setFillColor(sf::Color(0,255,0, 60));
+	
+	updateVisionCone();
 }
 
 void Player::update(sf::Time t_deltaTime)
@@ -36,6 +39,7 @@ void Player::update(sf::Time t_deltaTime)
 	m_position = m_circle.getPosition() + m_velocity;
 
 	checkBoundary();
+	updateVisionCone();
 
 	m_circle.setPosition(m_position);
 	m_front.setPosition(m_position);
@@ -50,6 +54,7 @@ void Player::draw(sf::RenderWindow& t_window)
 {
 	//t_window.draw(m_circle);
 	//t_window.draw(m_front);
+	t_window.draw(m_visionCone);
 	t_window.draw(m_sprite);
 }
 
@@ -103,6 +108,18 @@ void Player::checkBoundary()
 	{
 		m_position.y = 620;
 	}
+}
+
+void Player::updateVisionCone()
+{
+	float visionAngle = 45.0f; // in degrees
+	float visionLength = 200.0f;
+	float leftAngle = (m_rotation - visionAngle / 2.0f) * (M_PI / 180.0f); // in radians
+	float rightAngle = (m_rotation + visionAngle / 2.0f) * (M_PI / 180.0f); // in radians
+	
+	m_visionCone.setPoint(0, m_position); // First point at player position
+	m_visionCone.setPoint(1, m_position + sf::Vector2f(cos(leftAngle), sin(leftAngle)) * visionLength); // Second point at left corner
+	m_visionCone.setPoint(2, m_position + sf::Vector2f(cos(rightAngle), sin(rightAngle)) * visionLength); // Third point at right corner
 }
 
 sf::Vector2f Player::getPosition()

@@ -137,9 +137,6 @@ sf::Vector2f Pursue::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playe
 
 	sf::Vector2f newTarget = t_playerPos + t_playerVelocity * timePrediction;
 
-	std::cout << "player pos: " << t_playerPos.x << " , " << t_playerPos.y << std::endl;
-	std::cout << "new player pos: " << newTarget.x << " , " << newTarget.y << std::endl << std::endl;
-
 	Seek newSeek;
 	steering = newSeek.getSteering(t_currentPos, newTarget, t_rotation, t_velocity, t_playerVelocity);
 

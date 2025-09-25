@@ -56,6 +56,11 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 	m_circle.setFillColor(sf::Color::Red);
 	m_circle.setPosition(m_position);
 
+	m_visionCone.setPointCount(3);
+	m_visionCone.setFillColor(sf::Color(0, 0, 255, 60));
+
+	updateVisionCone();
+
 	m_sprite.setPosition(m_position);
 }
 
@@ -74,6 +79,7 @@ void Npc::update(sf::Vector2f t_playerPos, sf::Vector2f t_playerVelocity)
 		m_position += m_velocity;
 
 		checkBoundary();
+		updateVisionCone();
 
 		m_sprite.setPosition(m_position);
 		m_circle.setPosition(m_position);
@@ -94,6 +100,7 @@ void Npc::update(sf::Vector2f t_playerPos, sf::Vector2f t_playerVelocity)
 void Npc::draw(sf::RenderWindow& t_window)
 {
 	//t_window.draw(m_circle);
+	t_window.draw(m_visionCone);
 	t_window.draw(m_sprite);
 	t_window.draw(m_text);
 }
@@ -117,6 +124,18 @@ void Npc::checkBoundary()
 	{
 		m_position.y = 620;
 	}
+}
+
+void Npc::updateVisionCone()
+{
+	float visionAngle = 45.0f; // in degrees
+	float visionLength = 200.0f;
+	float leftAngle = (m_rotation - visionAngle / 2.0f) * (M_PI / 180.0f); // in radians
+	float rightAngle = (m_rotation + visionAngle / 2.0f) * (M_PI / 180.0f); // in radians
+	
+	m_visionCone.setPoint(0, m_position); // First point at NPC position
+	m_visionCone.setPoint(1, m_position + sf::Vector2f(cos(leftAngle), sin(leftAngle)) * visionLength); // Second point at left corner
+	m_visionCone.setPoint(2, m_position + sf::Vector2f(cos(rightAngle), sin(rightAngle)) * visionLength); // Third point at right corner
 }
 
 void Npc::setBehaviour(std::unique_ptr<Behaviour> t_behaviour)

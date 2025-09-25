@@ -11,6 +11,7 @@ private:
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
 	sf::CircleShape m_circle;
+	sf::ConvexShape m_visionCone;
 
 	sf::Font m_font;
 	sf::Text m_text;
@@ -31,6 +32,7 @@ public:
 	void draw(sf::RenderWindow& t_window);
 
 	void checkBoundary();
+	void updateVisionCone();
 
 	void setBehaviour(std::unique_ptr<Behaviour> t_behaviour);
 };
