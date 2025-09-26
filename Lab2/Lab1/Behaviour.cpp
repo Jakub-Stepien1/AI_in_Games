@@ -123,27 +123,21 @@ SteeringOutput Wander::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_pla
 {
 	SteeringOutput steering;
 	
-	//float wanderOffset = 10.0f;
-	//float wanderRadius = 5.0f;
-	//float wanderRate = 1.0f;
-	//float wanderOrientation = 0.0f;
-	//float maxAcc = 2.0f;
+	float wanderOffset = 50.0f;
+	float wanderRadius = 10.0f;
+	float wanderRate = 1.0f;
+	float wanderOrientation = 0.0f;
+	float maxAcc = 8.0f;
 
-	//wanderOrientation += (rand() % 3 - 1) * wanderRate;
-	//float targetOrientation = wanderOrientation + t_rotation;
+	wanderOrientation += (rand() % 100 + 1) / 100 - 0.5f;
+	float targetOrientation = t_rotation + wanderOrientation;
+	//Get centre of circle
 
-	//// Get center of wander circle
-	//sf::Vector2f targetCenter = t_currentPos + (sf::Vector2f(1.0f, t_rotation) * wanderOffset);
-	//targetCenter += wanderRadius * sf::Vector2f(1.0f, sf::Angle(sf::degrees(targetOrientation)));
-
-	//steering = targetCenter - t_currentPos;
-
-
-
-	steering.linear = t_playerPos - t_currentPos;
-	steering.linear = steering.linear.normalized();
-	t_rotation = t_rotation + (rand() % 3 - 1) * 2.0f;
-	steering.linear = sf::Vector2f(1.0f, sf::Angle(sf::degrees(t_rotation)));
+	// Kinematic
+	//steering.linear = t_playerPos - t_currentPos;
+	//steering.linear = steering.linear.normalized();
+	//t_rotation = t_rotation + (rand() % 3 - 1) * 2.0f;
+	//steering.linear = sf::Vector2f(1.0f, sf::Angle(sf::degrees(t_rotation)));
 
 	return steering;
 }
