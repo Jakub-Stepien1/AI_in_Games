@@ -17,7 +17,8 @@ Game::Game() :
 	m_arriveSlowNpc(std::make_unique<ArriveSlow>()),
 	m_arriveFastNpc(std::make_unique<ArriveFast>()),
 	m_wanderNpc(std::make_unique<Wander>()),
-	m_pursueNpc(std::make_unique<Pursue>())
+	m_pursueNpc(std::make_unique<Pursue>()),
+	m_gameText(m_jerseyFont)
 {
 	setupTexts(); // load font 
 	setupSprites(); // load texture
@@ -119,11 +120,11 @@ void Game::update(sf::Time t_deltaTime)
 
 	m_player.update(t_deltaTime);
 
-	m_seekNpc.update(m_player.getPosition(), m_player.getVelocity());
-	m_arriveSlowNpc.update(m_player.getPosition(), m_player.getVelocity());
-	m_arriveFastNpc.update(m_player.getPosition(), m_player.getVelocity());
-	m_wanderNpc.update(m_player.getPosition(), m_player.getVelocity());
-	m_pursueNpc.update(m_player.getPosition(), m_player.getVelocity());
+	m_seekNpc.update(m_player.getPosition(), m_player.getVelocity(), t_deltaTime);
+	m_arriveSlowNpc.update(m_player.getPosition(), m_player.getVelocity(), t_deltaTime);
+	m_arriveFastNpc.update(m_player.getPosition(), m_player.getVelocity(), t_deltaTime);
+	m_wanderNpc.update(m_player.getPosition(), m_player.getVelocity(), t_deltaTime);
+	m_pursueNpc.update(m_player.getPosition(), m_player.getVelocity(), t_deltaTime);
 }
 
 /// <summary>
@@ -133,6 +134,7 @@ void Game::render()
 {
 	m_window.clear(sf::Color::White);
 
+	m_window.draw(m_gameText);
 	m_seekNpc.draw(m_window);
 	m_arriveSlowNpc.draw(m_window);
 	m_arriveFastNpc.draw(m_window);
@@ -153,6 +155,10 @@ void Game::setupTexts()
 	{
 		std::cout << "problem loading arial black font" << std::endl;
 	}
+
+	m_gameText.setCharacterSize(20);
+	m_gameText.setFillColor(sf::Color::Black);
+	m_gameText.setString("You can toggle the active Npc's by pressing 1-5");
 
 }
 

@@ -40,9 +40,10 @@ private:
 	void setupSprites();
 	void setupAudio();
 
-	
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_jerseyFont;// font used by message
+
+	sf::Text m_gameText;
 	
 	bool m_DELETEexitGame; // control exiting game
 

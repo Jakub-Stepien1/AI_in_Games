@@ -40,7 +40,8 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 		break;
 	}
 
-	m_speed = 2.0f;
+	m_maxSpeed = 3.0f;
+	m_maxRotation = 180.0f;
 	m_velocity = sf::Vector2f(0.0f, 0.0f);
 
 	m_active = false;
@@ -56,6 +57,11 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 	m_circle.setFillColor(sf::Color::Red);
 	m_circle.setPosition(m_position);
 
+	m_headingLine.setSize(sf::Vector2f(200.0f, 1.0f));
+	m_headingLine.setOrigin(sf::Vector2f(0.0f, 0.5f));
+	m_headingLine.setPosition(m_position);
+	m_headingLine.setFillColor(sf::Color::Black);
+
 	m_visionAngle = 45.0f; // in degrees
 	m_visionLength = 200.0f;
 	m_leftAngle = (m_rotation - m_visionAngle / 2.0f) * (M_PI / 180.0f); // in radians
@@ -69,7 +75,7 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 	m_sprite.setPosition(m_position);
 }
 
-void Npc::update(sf::Vector2f t_playerPos, sf::Vector2f t_playerVelocity)
+void Npc::update(sf::Vector2f t_playerPos, sf::Vector2f t_playerVelocity, sf::Time t_deltaTime)
 {
 	if (sf::Keyboard::isKeyPressed(m_behaviour->getKey()) && !m_isKeyHeld)
 	{
@@ -78,10 +84,28 @@ void Npc::update(sf::Vector2f t_playerPos, sf::Vector2f t_playerVelocity)
 	}
 	if (m_active)
 	{
-		m_rotation = m_sprite.getRotation().asDegrees();
+		SteeringOutput steering = m_behaviour->getSteering(m_position, t_playerPos, m_rotation, m_velocity, t_playerVelocity);
 
-		m_velocity = m_behaviour->getSteering(m_position, t_playerPos, m_rotation, m_velocity, t_playerVelocity) * m_speed;
-		m_position += m_velocity;
+		m_velocity = m_velocity + steering.linear * t_deltaTime.asSeconds();
+		m_orientation = m_orientation + steering.angular * t_deltaTime.asSeconds();
+
+		if (m_velocity.length() > m_maxSpeed)
+		{
+			m_velocity = m_velocity.normalized() * m_maxSpeed;
+		}
+		if (m_orientation > m_maxRotation)
+		{
+			m_orientation = m_maxRotation;
+		}
+		else if (-m_orientation > m_maxRotation)
+		{
+			m_orientation = -m_maxRotation;
+		}
+		m_position += m_velocity; //* t_deltaTime.asSeconds();
+		m_rotation += m_orientation;//* t_deltaTime.asSeconds();
+
+		//m_velocity = m_behaviour->getSteering(m_position, t_playerPos, m_rotation, m_velocity, t_playerVelocity) * m_speed;
+		//m_position += m_velocity;
 
 		checkBoundary();
 		updateVisionCone();
@@ -98,12 +122,10 @@ void Npc::update(sf::Vector2f t_playerPos, sf::Vector2f t_playerVelocity)
 		m_sprite.setPosition(m_position);
 		m_circle.setPosition(m_position);
 		m_text.setPosition(sf::Vector2f(m_position.x, m_position.y + 40.0f));
+		m_headingLine.setPosition(m_position);
 
-		//sf::Vector2f facePlayer = t_playerPos - m_position;
-		//facePlayer = facePlayer.normalized();
-
-		//m_rotation = atan2(facePlayer.y, facePlayer.x) * 180.0f / M_PI;
 		m_sprite.setRotation(sf::Angle(sf::degrees(m_rotation)));
+		m_headingLine.setRotation(sf::Angle(sf::degrees(m_rotation)));
 	}
 	if (!sf::Keyboard::isKeyPressed(m_behaviour->getKey()))
 	{
@@ -113,10 +135,14 @@ void Npc::update(sf::Vector2f t_playerPos, sf::Vector2f t_playerVelocity)
 
 void Npc::draw(sf::RenderWindow& t_window)
 {
-	//t_window.draw(m_circle);
-	t_window.draw(m_visionCone);
-	t_window.draw(m_sprite);
-	t_window.draw(m_text);
+	if (m_active)
+	{
+		//t_window.draw(m_circle);
+		t_window.draw(m_visionCone);
+		t_window.draw(m_headingLine);
+		t_window.draw(m_sprite);
+		t_window.draw(m_text);
+	}
 }
 
 void Npc::checkBoundary()
@@ -167,7 +193,7 @@ bool Npc::isPlayerInVisionCone(sf::Vector2f t_playerPos)
 		angleToPlayer = angleToPlayer * (180.0f / M_PI);
 		float angleDifference = angleToPlayer - m_rotation;
 
-		while (angleDifference > 180) // while loops to keep the angle difference the the right range, prevents issues with wrapping
+		while (angleDifference > 180) // while loops to keep the angle difference in the right range, prevents issues with wrapping
 		{
 			angleDifference -= 180;
 		}

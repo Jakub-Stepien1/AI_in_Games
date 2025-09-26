@@ -1,13 +1,16 @@
 #include "Behaviour.h"
 
-sf::Vector2f Seek::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos, float& t_rotation, sf::Vector2f t_velocity, sf::Vector2f t_playerVelocity)
+SteeringOutput Seek::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos, float& t_rotation, sf::Vector2f t_velocity, sf::Vector2f t_playerVelocity)
 {
-	sf::Vector2f steering{ 0.0f,0.0f };
+	SteeringOutput steering;
 
-	steering = t_playerPos - t_currentPos;
-	steering = steering.normalized();
+	float maxAcc = 5.0f;
 
-	t_rotation = atan2(steering.y, steering.x) * 180.0f / M_PI;
+	steering.linear = t_playerPos - t_currentPos;
+	steering.linear = steering.linear.normalized() * maxAcc;
+
+	steering.angular = 0;
+	t_rotation = atan2(steering.linear.y, steering.linear.x) * 180.0f / M_PI;
 
 	return steering;
 }
@@ -17,30 +20,30 @@ sf::Keyboard::Key Seek::getKey()
 	return sf::Keyboard::Key::Num1;
 }
 
-sf::Vector2f ArriveSlow::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos, float& t_rotation, sf::Vector2f t_velocity, sf::Vector2f t_playerVelocity)
+SteeringOutput ArriveSlow::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos, float& t_rotation, sf::Vector2f t_velocity, sf::Vector2f t_playerVelocity)
 {
-	sf::Vector2f steering{ 0.0f,0.0f };
+	SteeringOutput steering;
 	
 	float radius = 30.0f;
 	float timeToTarget = 0.25f;
 	float t_maxSpeed = 1.0f;
 	
-	steering = t_playerPos - t_currentPos;
-	if (steering.length() < radius)
+	steering.linear = t_playerPos - t_currentPos;
+	if (steering.linear.length() < radius)
 	{
-		steering = sf::Vector2f{ 0.0f,0.0f };
+		steering.linear = sf::Vector2f{ 0.0f,0.0f };
 		return steering;
 	}
 	else
 	{
-		steering = steering / timeToTarget;
-		if (steering.length() > t_maxSpeed)
+		steering.linear = steering.linear / timeToTarget;
+		if (steering.linear.length() > t_maxSpeed)
 		{
-			steering = steering.normalized() * t_maxSpeed;
+			steering.linear = steering.linear.normalized() * t_maxSpeed;
 		}
 	}
 
-	t_rotation = atan2(steering.y, steering.x) * 180.0f / M_PI;
+	t_rotation = atan2(steering.linear.y, steering.linear.x) * 180.0f / M_PI;
 
 	return steering;
 }
@@ -50,30 +53,30 @@ sf::Keyboard::Key ArriveSlow::getKey()
 	return sf::Keyboard::Key::Num2;
 }
 
-sf::Vector2f ArriveFast::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos, float& t_rotation, sf::Vector2f t_velocity, sf::Vector2f t_playerVelocity)
+SteeringOutput ArriveFast::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos, float& t_rotation, sf::Vector2f t_velocity, sf::Vector2f t_playerVelocity)
 {
-	sf::Vector2f steering{ 0.0f,0.0f };
-	
+	SteeringOutput steering;
+
 	float radius = 30.0f;
 	float timeToTarget = 0.25f;
 	float t_maxSpeed = 2.0f;
 
-	steering = t_playerPos - t_currentPos;
-	if (steering.length() < radius)
+	steering.linear = t_playerPos - t_currentPos;
+	if (steering.linear.length() < radius)
 	{
-		steering = sf::Vector2f{ 0.0f,0.0f };
+		steering.linear = sf::Vector2f{ 0.0f,0.0f };
 		return steering;
 	}
 	else
 	{
-		steering = steering / timeToTarget;
-		if (steering.length() > t_maxSpeed)
+		steering.linear = steering.linear / timeToTarget;
+		if (steering.linear.length() > t_maxSpeed)
 		{
-			steering = steering.normalized() * t_maxSpeed;
+			steering.linear = steering.linear.normalized() * t_maxSpeed;
 		}
 	}
 
-	t_rotation = atan2(steering.y, steering.x) * 180.0f / M_PI;
+	t_rotation = atan2(steering.linear.y, steering.linear.x) * 180.0f / M_PI;
 
 	return steering;
 }
@@ -83,9 +86,9 @@ sf::Keyboard::Key ArriveFast::getKey()
 	return sf::Keyboard::Key::Num3;
 }
 
-sf::Vector2f Wander::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos, float& t_rotation, sf::Vector2f t_velocity, sf::Vector2f t_playerVelocity)
+SteeringOutput Wander::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos, float& t_rotation, sf::Vector2f t_velocity, sf::Vector2f t_playerVelocity)
 {
-	sf::Vector2f steering{ 0.0f,0.0f };
+	SteeringOutput steering;
 	
 	//float wanderOffset = 10.0f;
 	//float wanderRadius = 5.0f;
@@ -102,10 +105,12 @@ sf::Vector2f Wander::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playe
 
 	//steering = targetCenter - t_currentPos;
 
-	steering = t_playerPos - t_currentPos;
-	steering = steering.normalized();
-	t_rotation = t_rotation + (rand() % 3 - 1) * 3.0f;
-	steering = sf::Vector2f(1.0f, sf::Angle(sf::degrees(t_rotation)));
+
+
+	steering.linear = t_playerPos - t_currentPos;
+	steering.linear = steering.linear.normalized();
+	t_rotation = t_rotation + (rand() % 3 - 1) * 2.0f;
+	steering.linear = sf::Vector2f(1.0f, sf::Angle(sf::degrees(t_rotation)));
 
 	return steering;
 }
@@ -115,16 +120,15 @@ sf::Keyboard::Key Wander::getKey()
 	return sf::Keyboard::Key::Num4;
 }
 
-sf::Vector2f Pursue::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos, float& t_rotation, sf::Vector2f t_velocity, sf::Vector2f t_playerVelocity)
+SteeringOutput Pursue::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playerPos, float& t_rotation, sf::Vector2f t_velocity, sf::Vector2f t_playerVelocity)
 {
-	sf::Vector2f steering{ 0.0f,0.0f };
+	SteeringOutput steering;
 
-	steering = t_playerPos - t_currentPos;
-	float distance = steering.length();
-	float maxTimePrediction = 20.0f;
+	steering.linear = t_playerPos - t_currentPos;
+	float distance = steering.linear.length();
+	float maxTimePrediction = 10.0f;
 	float timePrediction = 0;
 	float speed = t_velocity.length();
-
 
 	if (speed <= distance/maxTimePrediction)
 	{

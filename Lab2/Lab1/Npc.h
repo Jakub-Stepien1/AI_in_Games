@@ -12,13 +12,17 @@ private:
 	sf::Sprite m_sprite;
 	sf::CircleShape m_circle;
 	sf::ConvexShape m_visionCone;
+	sf::RectangleShape m_headingLine;
 
 	sf::Font m_font;
 	sf::Text m_text;
 
 	sf::Vector2f m_position;
 	float m_rotation;
-	float m_speed;
+	float m_maxRotation;
+	float m_orientation;
+
+	float m_maxSpeed;
 	sf::Vector2f m_velocity;
 	bool m_active;
 	bool m_isKeyHeld;
@@ -33,7 +37,7 @@ private:
 public:
 	Npc(std::unique_ptr<Behaviour> t_behaviour);
 
-	void update(sf::Vector2f t_playerPos, sf::Vector2f t_playerVelocity);
+	void update(sf::Vector2f t_playerPos, sf::Vector2f t_playerVelocity, sf::Time t_deltaTime);
 	void draw(sf::RenderWindow& t_window);
 
 	void checkBoundary();
