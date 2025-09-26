@@ -4,13 +4,14 @@ SteeringOutput Seek::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_playe
 {
 	SteeringOutput steering;
 
-	float maxAcc = 5.0f;
+	float maxAcc = 8.0f;
 
-	steering.linear = t_playerPos - t_currentPos;
+	sf::Vector2f direction = t_playerPos - t_currentPos;
+	steering.linear = direction;
 	steering.linear = steering.linear.normalized() * maxAcc;
 
 	steering.angular = 0;
-	t_rotation = atan2(steering.linear.y, steering.linear.x) * 180.0f / M_PI;
+	t_rotation = atan2(direction.y, direction.x) * 180.0f / M_PI;
 
 	return steering;
 }
@@ -24,26 +25,42 @@ SteeringOutput ArriveSlow::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t
 {
 	SteeringOutput steering;
 	
-	float radius = 30.0f;
+	float arrivalRadius = 40.0f;
+	float slowRadius = 200.0f;
 	float timeToTarget = 0.25f;
-	float t_maxSpeed = 1.0f;
-	
-	steering.linear = t_playerPos - t_currentPos;
-	if (steering.linear.length() < radius)
+	float maxSpeed = 2.0f;
+	float maxAcceleration = 8.0f;
+	float targetSpeed = 0;
+
+	sf::Vector2f direction = t_playerPos - t_currentPos;
+	float distance = direction.length();
+
+	//Set Speed
+	if (distance < arrivalRadius)
 	{
-		steering.linear = sf::Vector2f{ 0.0f,0.0f };
-		return steering;
+		targetSpeed = 0;
+	}
+	else if (distance > slowRadius)
+	{
+		targetSpeed = maxSpeed;
 	}
 	else
 	{
-		steering.linear = steering.linear / timeToTarget;
-		if (steering.linear.length() > t_maxSpeed)
-		{
-			steering.linear = steering.linear.normalized() * t_maxSpeed;
-		}
+		targetSpeed = maxSpeed * (distance / slowRadius);
 	}
+	sf::Vector2f targetVelocity = direction;
+	targetVelocity = targetVelocity.normalized() * targetSpeed;
 
-	t_rotation = atan2(steering.linear.y, steering.linear.x) * 180.0f / M_PI;
+	steering.linear = targetVelocity - t_velocity;
+	steering.linear = steering.linear / timeToTarget;
+
+	if (steering.linear.length() > maxAcceleration)
+	{
+		steering.linear = steering.linear.normalized() * maxAcceleration;
+	}
+	steering.angular = 0;
+
+	t_rotation = atan2(direction.y, direction.x) * 180.0f / M_PI;
 
 	return steering;
 }
@@ -57,26 +74,42 @@ SteeringOutput ArriveFast::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t
 {
 	SteeringOutput steering;
 
-	float radius = 30.0f;
+	float arrivalRadius = 40.0f;
+	float slowRadius = 200.0f;
 	float timeToTarget = 0.25f;
-	float t_maxSpeed = 2.0f;
+	float maxSpeed = 6.0f;
+	float maxAcceleration = 8.0f;
+	float targetSpeed = 0;
 
-	steering.linear = t_playerPos - t_currentPos;
-	if (steering.linear.length() < radius)
+	sf::Vector2f direction = t_playerPos - t_currentPos;
+	float distance = direction.length();
+
+	//Set Speed
+	if (distance < arrivalRadius)
 	{
-		steering.linear = sf::Vector2f{ 0.0f,0.0f };
-		return steering;
+		targetSpeed = 0;
+	}
+	else if (distance > slowRadius)
+	{
+		targetSpeed = maxSpeed;
 	}
 	else
 	{
-		steering.linear = steering.linear / timeToTarget;
-		if (steering.linear.length() > t_maxSpeed)
-		{
-			steering.linear = steering.linear.normalized() * t_maxSpeed;
-		}
+		targetSpeed = maxSpeed * (distance / slowRadius);
 	}
+	sf::Vector2f targetVelocity = direction;
+	targetVelocity = targetVelocity.normalized() * targetSpeed;
 
-	t_rotation = atan2(steering.linear.y, steering.linear.x) * 180.0f / M_PI;
+	steering.linear = targetVelocity - t_velocity;
+	steering.linear = steering.linear / timeToTarget;
+
+	if (steering.linear.length() > maxAcceleration)
+	{
+		steering.linear = steering.linear.normalized() * maxAcceleration;
+	}
+	steering.angular = 0;
+
+	t_rotation = atan2(direction.y, direction.x) * 180.0f / M_PI;
 
 	return steering;
 }
