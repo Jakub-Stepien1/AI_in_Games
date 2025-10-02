@@ -43,6 +43,8 @@ public:
 	void checkBoundary();
 	void updateVisionCone();
 	bool isPlayerInVisionCone(sf::Vector2f t_playerPos);
+	void calcLJ(sf::Vector2f t_otherNpcPos);
 
 	void setBehaviour(std::unique_ptr<Behaviour> t_behaviour);
+	sf::Vector2f getPosition();
 };

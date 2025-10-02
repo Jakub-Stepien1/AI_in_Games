@@ -19,6 +19,13 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 	int yPos = rand() % 600 + 1;
 	m_position = sf::Vector2f(xPos, yPos);
 
+	m_maxSpeed = 3.0f;
+	m_maxRotation = 180.0f;
+	m_velocity = sf::Vector2f(0.0f, 0.0f);
+
+	m_active = false;
+	m_isKeyHeld = false;
+
 	switch (m_behaviour->getKey())
 	{
 	case sf::Keyboard::Key::Num1:
@@ -38,18 +45,11 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 		break;
 	case sf::Keyboard::Key::Num6:
 		m_text.setString("Swarm");
-		m_sprite.setScale(sf::Vector2f(0.1f, 0.1f));
+		m_sprite.setScale(sf::Vector2f(0.08f, 0.08f));
 		break;
 	default:
 		break;
 	}
-
-	m_maxSpeed = 3.0f;
-	m_maxRotation = 180.0f;
-	m_velocity = sf::Vector2f(0.0f, 0.0f);
-
-	m_active = false;
-	m_isKeyHeld = false;
 
 	m_text.setCharacterSize(16);
 	m_text.setFillColor(sf::Color::Black);
@@ -142,8 +142,12 @@ void Npc::draw(sf::RenderWindow& t_window)
 	if (m_active)
 	{
 		//t_window.draw(m_circle);
-		t_window.draw(m_visionCone);
-		t_window.draw(m_headingLine);
+		if (m_behaviour->getKey() != sf::Keyboard::Key::Num6)
+		{
+			t_window.draw(m_visionCone);
+			t_window.draw(m_headingLine);
+		}
+
 		t_window.draw(m_sprite);
 		t_window.draw(m_text);
 	}
@@ -215,7 +219,33 @@ bool Npc::isPlayerInVisionCone(sf::Vector2f t_playerPos)
 	return isInCone;
 }
 
+void Npc::calcLJ(sf::Vector2f t_otherNpcPos)
+{
+	float attractionStrength = 20.0f;
+	float repulsionStrength = 140.0f;
+	float attractionAttenuation = 0.4f;
+	float repulsionAttenuation = 0.8f;
+
+	sf::Vector2f direction = m_position - t_otherNpcPos;
+	float distance = direction.length();
+
+	float potential = -(attractionStrength / pow(distance, attractionAttenuation)) + (repulsionStrength / pow(distance, repulsionAttenuation));
+
+	if (distance < 0.01f)
+	{
+		return;
+	}
+	direction = direction.normalized();
+
+	m_velocity += direction * potential;
+}
+
 void Npc::setBehaviour(std::unique_ptr<Behaviour> t_behaviour)
 {
 	m_behaviour = std::move(t_behaviour); 
+}
+
+sf::Vector2f Npc::getPosition()
+{
+	return m_position;
 }

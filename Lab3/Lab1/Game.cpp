@@ -129,6 +129,14 @@ void Game::update(sf::Time t_deltaTime)
 	for (Npc* npc : m_swarmNpcs)
 	{
 		npc->update(m_player.getPosition(), m_player.getVelocity(), t_deltaTime);
+
+		for (Npc* otherNpc : m_swarmNpcs)
+		{
+			if (npc != otherNpc)
+			{
+				npc->calcLJ(otherNpc->getPosition());
+			}
+		}
 	}
 }
 
@@ -168,7 +176,7 @@ void Game::setupTexts()
 
 	m_gameText.setCharacterSize(20);
 	m_gameText.setFillColor(sf::Color::Black);
-	m_gameText.setString("You can toggle the active Npc's by pressing 1-5");
+	m_gameText.setString("You can toggle the active Npc's by pressing 1-5\nYou can toggle the swarm by pressing 6");
 
 	for (int i = 0; i < 50; i++)
 	{
