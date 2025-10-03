@@ -22,34 +22,10 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 	m_maxSpeed = 3.0f;
 	m_maxRotation = 180.0f;
 	m_velocity = sf::Vector2f(0.0f, 0.0f);
+	m_orientation = 0.0f;
 
 	m_active = false;
 	m_isKeyHeld = false;
-
-	switch (m_behaviour->getKey())
-	{
-	case sf::Keyboard::Key::Num1:
-		m_text.setString("Seek");
-		break;
-	case sf::Keyboard::Key::Num2:
-		m_text.setString("Arrive Slow");
-		break;
-	case sf::Keyboard::Key::Num3:
-		m_text.setString("Arrive Fast");
-		break;
-	case sf::Keyboard::Key::Num4:
-		m_text.setString("Wander");
-		break;
-	case sf::Keyboard::Key::Num5:
-		m_text.setString("Pursue");
-		break;
-	case sf::Keyboard::Key::Num6:
-		m_text.setString("Swarm");
-		m_sprite.setScale(sf::Vector2f(0.08f, 0.08f));
-		break;
-	default:
-		break;
-	}
 
 	m_text.setCharacterSize(16);
 	m_text.setFillColor(sf::Color::Black);
@@ -75,6 +51,32 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 	m_visionCone.setFillColor(sf::Color(0, 0, 255, 60));
 
 	updateVisionCone();
+
+	switch (m_behaviour->getKey())
+	{
+	case sf::Keyboard::Key::Num1:
+		m_text.setString("Seek");
+		break;
+	case sf::Keyboard::Key::Num2:
+		m_text.setString("Arrive Slow");
+		break;
+	case sf::Keyboard::Key::Num3:
+		m_text.setString("Arrive Fast");
+		break;
+	case sf::Keyboard::Key::Num4:
+		m_text.setString("Wander");
+		break;
+	case sf::Keyboard::Key::Num5:
+		m_text.setString("Pursue");
+		break;
+	case sf::Keyboard::Key::Num6:
+		m_text.setString("Swarm");
+		m_sprite.setScale(sf::Vector2f(0.05f, 0.05f));
+		m_text.setCharacterSize(12.0f);
+		break;
+	default:
+		break;
+	}
 
 	m_sprite.setPosition(m_position);
 }
@@ -105,11 +107,8 @@ void Npc::update(sf::Vector2f t_playerPos, sf::Vector2f t_playerVelocity, sf::Ti
 		{
 			m_orientation = -m_maxRotation;
 		}
-		m_position += m_velocity; //* t_deltaTime.asSeconds();
-		m_rotation += m_orientation;//* t_deltaTime.asSeconds();
-
-		//m_velocity = m_behaviour->getSteering(m_position, t_playerPos, m_rotation, m_velocity, t_playerVelocity) * m_speed;
-		//m_position += m_velocity;
+		m_position += m_velocity;
+		m_rotation += m_orientation;
 
 		checkBoundary();
 		updateVisionCone();
@@ -221,20 +220,26 @@ bool Npc::isPlayerInVisionCone(sf::Vector2f t_playerPos)
 
 void Npc::calcLJ(sf::Vector2f t_otherNpcPos)
 {
-	float attractionStrength = 20.0f;
-	float repulsionStrength = 160.0f;
-	float attractionAttenuation = 0.4f;
-	float repulsionAttenuation = 0.8f;
+	float attractionStrength = 800.0f; // 25 (800)
+	float repulsionStrength = 1000.0f; // 150 (1000)
+	float attractionAttenuation = 15.0f; // 0.4 (15)
+	float repulsionAttenuation = 3.0f; // 0.8 (3)
 
 	sf::Vector2f direction = m_position - t_otherNpcPos;
 	float distance = direction.length();
 
-	float potential = -(attractionStrength / pow(distance, attractionAttenuation)) + (repulsionStrength / pow(distance, repulsionAttenuation));
+	if (distance < 1.0f)
+	{
+		distance = 1.0f;
+	}
+
+	float potential = (-attractionStrength / pow(distance, attractionAttenuation)) + (repulsionStrength / pow(distance, repulsionAttenuation));
 
 	if (distance < 0.01f)
 	{
 		return;
 	}
+
 	direction = direction.normalized();
 
 	m_velocity += direction * potential;
