@@ -128,8 +128,6 @@ void Game::update(sf::Time t_deltaTime)
 
 	for (Npc* npc : m_swarmNpcs)
 	{
-		npc->update(m_player.getPosition(), m_player.getVelocity(), t_deltaTime);
-
 		for (Npc* otherNpc : m_swarmNpcs)
 		{
 			if (npc != otherNpc)
@@ -137,6 +135,7 @@ void Game::update(sf::Time t_deltaTime)
 				npc->calcLJ(otherNpc->getPosition());
 			}
 		}
+		npc->update(m_player.getPosition(), m_player.getVelocity(), t_deltaTime);
 	}
 }
 

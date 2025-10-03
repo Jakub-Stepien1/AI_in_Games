@@ -222,7 +222,7 @@ bool Npc::isPlayerInVisionCone(sf::Vector2f t_playerPos)
 void Npc::calcLJ(sf::Vector2f t_otherNpcPos)
 {
 	float attractionStrength = 20.0f;
-	float repulsionStrength = 140.0f;
+	float repulsionStrength = 160.0f;
 	float attractionAttenuation = 0.4f;
 	float repulsionAttenuation = 0.8f;
 

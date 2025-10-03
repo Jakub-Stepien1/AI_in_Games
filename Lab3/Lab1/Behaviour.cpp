@@ -184,7 +184,7 @@ SteeringOutput Swarm::getSteering(sf::Vector2f t_currentPos, sf::Vector2f t_play
 {
 	SteeringOutput steering;
 
-	float maxAcc = 2.0f;
+	float maxAcc = 1.0f;
 
 	sf::Vector2f direction;
 
