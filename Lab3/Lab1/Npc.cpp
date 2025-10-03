@@ -228,14 +228,9 @@ void Npc::calcLJ(sf::Vector2f t_otherNpcPos)
 	sf::Vector2f direction = m_position - t_otherNpcPos;
 	float distance = direction.length();
 
-	if (distance < 1.0f)
-	{
-		distance = 1.0f;
-	}
-
 	float potential = (-attractionStrength / pow(distance, attractionAttenuation)) + (repulsionStrength / pow(distance, repulsionAttenuation));
 
-	if (distance < 0.01f)
+	if (distance < 0.01f) // Prevent normalizing a zero vector
 	{
 		return;
 	}
