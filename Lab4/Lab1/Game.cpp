@@ -142,6 +142,14 @@ void Game::update(sf::Time t_deltaTime)
 	{
 		//std::cout << m_player.getRotation() << std::endl;
 		sf::Vector2f target = m_player.getPosition() + getFormationTarget(m_formationOffsets[i], m_player.getRotation());
+		m_offsetVisual[i].setPosition(target);
+		for (int k = 0; k < 4; k++)
+		{
+			if (i != k)
+			{
+				m_npcFormation[i]->calcLJ(m_npcFormation[i]->getPosition()); // Helps prevent some overlapping of the npcs (looks better)
+			}
+		}
 		m_npcFormation[i]->update(target, m_player.getVelocity(), t_deltaTime);
 	}
 }
@@ -165,9 +173,13 @@ void Game::render()
 		npc->draw(m_window);
 	}
 
-	for (Npc* npc : m_npcFormation)
+	for (int i = 0; i < 4; i++)
 	{
-		npc->draw(m_window);
+		if (m_npcFormation[i]->isActive()) // Only draw visual of formation if the formation is active
+		{
+			m_window.draw(m_offsetVisual[i]);
+			m_npcFormation[i]->draw(m_window);
+		}
 	}
 
 	m_player.draw(m_window);
@@ -210,6 +222,12 @@ void Game::setupTexts()
 	{
 		Npc* newNpc = new Npc(std::make_unique<Formation>());
 		m_npcFormation.push_back(newNpc);
+		
+		sf::CircleShape newOffsetCircle;
+		newOffsetCircle.setRadius(4.0f);
+		newOffsetCircle.setOrigin(sf::Vector2f(4.0f, 4.0f));
+		newOffsetCircle.setFillColor(sf::Color::Black);
+		m_offsetVisual.push_back(newOffsetCircle);
 	}
 
 	m_formationOffsets = {

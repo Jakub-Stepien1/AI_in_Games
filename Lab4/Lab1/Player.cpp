@@ -7,7 +7,7 @@ Player::Player() :
 	srand(time(NULL));
 
 	m_sprite.setOrigin(sf::Vector2f(304.5f, 410.0f));
-	m_sprite.setScale(sf::Vector2f(0.1f, 0.1f));
+	m_sprite.setScale(sf::Vector2f(0.08f, 0.08f));
 
 	m_velocity = sf::Vector2f(0.0f, 0.0f);
 	m_speed = 0.0f;
@@ -112,7 +112,7 @@ void Player::checkBoundary()
 void Player::updateVisionCone()
 {
 	float visionAngle = 45.0f; // in degrees
-	float visionLength = 200.0f;
+	float visionLength = 150.0f;
 	float leftAngle = (m_rotation - visionAngle / 2.0f) * (M_PI / 180.0f); // in radians
 	float rightAngle = (m_rotation + visionAngle / 2.0f) * (M_PI / 180.0f); // in radians
 	

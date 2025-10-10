@@ -47,4 +47,5 @@ public:
 
 	void setBehaviour(std::unique_ptr<Behaviour> t_behaviour);
 	sf::Vector2f getPosition();
+	bool isActive();
 };

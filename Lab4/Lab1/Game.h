@@ -60,6 +60,7 @@ private:
 
 	std::vector<Npc*> m_npcFormation;
 	std::vector<sf::Vector2f> m_formationOffsets;
+	std::vector<sf::CircleShape> m_offsetVisual;
 };
 
 #pragma warning( pop ) 

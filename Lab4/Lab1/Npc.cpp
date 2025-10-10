@@ -13,7 +13,7 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 	m_behaviour = std::move(t_behaviour);
 
 	m_sprite.setOrigin(sf::Vector2f(208.0f,420.0f));
-	m_sprite.setScale(sf::Vector2f(0.15f, 0.15f));
+	m_sprite.setScale(sf::Vector2f(0.11f, 0.11f));
 
 	int xPos = rand() % 800 + 1;
 	int yPos = rand() % 600 + 1;
@@ -37,13 +37,13 @@ Npc::Npc(std::unique_ptr<Behaviour> t_behaviour) :
 	m_circle.setFillColor(sf::Color::Red);
 	m_circle.setPosition(m_position);
 
-	m_headingLine.setSize(sf::Vector2f(200.0f, 1.0f));
+	m_headingLine.setSize(sf::Vector2f(150.0f, 1.0f));
 	m_headingLine.setOrigin(sf::Vector2f(0.0f, 0.5f));
 	m_headingLine.setPosition(m_position);
 	m_headingLine.setFillColor(sf::Color::Black);
 
 	m_visionAngle = 45.0f; // in degrees
-	m_visionLength = 200.0f;
+	m_visionLength = 150.0f;
 	m_leftAngle = (m_rotation - m_visionAngle / 2.0f) * (M_PI / 180.0f); // in radians
 	m_rightAngle = (m_rotation + m_visionAngle / 2.0f) * (M_PI / 180.0f); // in radians
 
@@ -251,4 +251,9 @@ void Npc::setBehaviour(std::unique_ptr<Behaviour> t_behaviour)
 sf::Vector2f Npc::getPosition()
 {
 	return m_position;
+}
+
+bool Npc::isActive()
+{
+	return m_active;
 }
