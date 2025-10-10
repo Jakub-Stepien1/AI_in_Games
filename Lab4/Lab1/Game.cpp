@@ -140,7 +140,7 @@ void Game::update(sf::Time t_deltaTime)
 
 	for (int i = 0; i < 4; i++)
 	{
-		std::cout << m_player.getRotation() << std::endl;
+		//std::cout << m_player.getRotation() << std::endl;
 		sf::Vector2f target = m_player.getPosition() + getFormationTarget(m_formationOffsets[i], m_player.getRotation());
 		m_npcFormation[i]->update(target, m_player.getVelocity(), t_deltaTime);
 	}
