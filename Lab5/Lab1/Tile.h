@@ -13,10 +13,13 @@ public:
 	void draw(sf::RenderWindow& t_window);
 
 	bool isGoal();
+	bool isStart();
 
 	void hover();
 	void unhover();
 	void setGoal();
+	void setStart();
+	void clearTile();
 
 	void setPosition(sf::Vector2f t_position);
 	sf::Vector2f getPosition();
@@ -27,6 +30,8 @@ private:
 
 	bool goal;
 	bool start;
+	bool showCost;
+	bool showVector;
 
 	int distanceToGoal;
 

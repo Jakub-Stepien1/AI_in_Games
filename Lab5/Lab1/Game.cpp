@@ -97,6 +97,26 @@ void Game::processKeys(const std::optional<sf::Event> t_event)
 	if (sf::Keyboard::Key::Num8 == newKeypress->code)
 	{
 		m_flowFieldOn = !m_flowFieldOn;
+
+		if (!m_flowFieldOn)
+		{
+			m_gameText.setString("You can toggle the active Npc's by pressing 1-5\nYou can toggle the swarm by pressing 6\nYou can toggle the formation by pressing 7\nYou can toggle the flowfield pathfinding by pressig 8");
+		}
+		else
+		{
+			m_gameText.setString("You can go back by pressing 8\nYou can set the start tile by right clicking\nYou can set the goal tile by left clicking\nYou can reset the tiles by pressing 'R'");
+		}
+	}
+
+	if (m_flowFieldOn)
+	{
+		if (sf::Keyboard::Key::R == newKeypress->code)
+		{
+			for (auto& tile : m_tiles)
+			{
+				tile.clearTile();
+			}
+		}
 	}
 }
 
@@ -160,7 +180,7 @@ void Game::update(sf::Time t_deltaTime)
 			m_npcFormation[i]->update(target, m_player.getVelocity(), t_deltaTime);
 		}
 	}
-	else
+	else // Flowfield on
 	{
 		m_cursor.setPosition((sf::Vector2f)sf::Mouse::getPosition(m_window));
 
@@ -168,7 +188,7 @@ void Game::update(sf::Time t_deltaTime)
 		{
 			sf::Vector2f cursorPos = m_cursor.getPosition();
 			sf::Vector2f tilePos = tile.getPosition();
-			if (!tile.isGoal())
+			if (!tile.isGoal() && !tile.isStart())
 			{
 				if (cursorPos.x > tilePos.x && cursorPos.x < tilePos.x + 16.0f
 					&& cursorPos.y > tilePos.y && cursorPos.y < tilePos.y + 16.0f)
@@ -177,6 +197,10 @@ void Game::update(sf::Time t_deltaTime)
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 					{
 						tile.setGoal();
+					}
+					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
+					{
+						tile.setStart();
 					}
 				}
 				else
