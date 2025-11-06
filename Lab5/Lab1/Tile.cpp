@@ -79,6 +79,7 @@ void Tile::clearTile()
 	m_start = false;
 	m_distanceToGoal = 999;
 	m_shape.setFillColor(sf::Color(0, 0, 255, 70));
+	m_costText.setString(std::to_string(m_distanceToGoal));
 }
 
 void Tile::showCost()

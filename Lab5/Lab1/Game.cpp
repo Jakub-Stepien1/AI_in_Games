@@ -112,16 +112,16 @@ void Game::processKeys(const std::optional<sf::Event> t_event)
 	{
 		if (sf::Keyboard::Key::R == newKeypress->code)
 		{
-			for (auto& tile : m_tiles)
+			for (Tile* tile : m_tiles)
 			{
-				tile.clearTile();
+				tile->clearTile();
 			}
 		}
 		if (sf::Keyboard::Key::C == newKeypress->code)
 		{
-			for (auto& tile : m_tiles)
+			for (Tile* tile : m_tiles)
 			{
-				tile.showCost();
+				tile->showCost();
 			}
 		}
 	}
@@ -192,28 +192,41 @@ void Game::update(sf::Time t_deltaTime)
 		m_cursor.setPosition((sf::Vector2f)sf::Mouse::getPosition(m_window));
 		sf::Vector2f cursorPos = m_cursor.getPosition();
 
-		for (Tile& tile : m_tiles)
+		for (Tile* tile : m_tiles)
 		{
-			sf::Vector2f tilePos = tile.getPosition();
-			if (!tile.isGoal() && !tile.isStart())
+			sf::Vector2f tilePos = tile->getPosition();
+			if (!tile->isGoal() && !tile->isStart())
 			{
 				if (cursorPos.x > tilePos.x && cursorPos.x < tilePos.x + 16.0f
 					&& cursorPos.y > tilePos.y && cursorPos.y < tilePos.y + 16.0f)
 				{
-					tile.hover();
+					tile->hover();
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 					{
-						tile.setGoal();
-
+						tile->setGoal();
+						for (Tile* otherTile : m_tiles)
+						{
+							if (tile != otherTile && otherTile->isGoal())
+							{
+								otherTile->clearTile();
+							}
+						}
 					}
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
 					{
-						tile.setStart();
+						tile->setStart();
+						for (Tile* otherTile : m_tiles)
+						{
+							if (tile != otherTile && otherTile->isStart())
+							{
+								otherTile->clearTile();
+							}
+						}
 					}
 				}
 				else
 				{
-					tile.unhover();
+					tile->unhover();
 				}
 			}
 		}
@@ -230,9 +243,9 @@ void Game::render()
 	m_window.draw(m_gameText);
 	if (m_flowFieldOn)
 	{
-		for (auto& tile : m_tiles)
+		for (Tile* tile : m_tiles)
 		{
-			tile.draw(m_window);
+			tile->draw(m_window);
 		}
 
 		m_window.draw(m_cursor);
@@ -323,8 +336,8 @@ void Game::setupTexts()
 		pos.x = col * 16.0f;
 		pos.y = row * 16.0f;
 
-		Tile newTile(m_jerseyFont);
-		newTile.setPosition(pos);
+		Tile* newTile = new Tile(m_jerseyFont);
+		newTile->setPosition(pos);
 		m_tiles.push_back(newTile);
 
 		col += 1;

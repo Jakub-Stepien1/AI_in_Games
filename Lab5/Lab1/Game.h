@@ -63,7 +63,7 @@ private:
 	std::vector<sf::Vector2f> m_formationOffsets;
 	std::vector<sf::CircleShape> m_offsetVisual;
 
-	std::vector<Tile> m_tiles;
+	std::vector<Tile*> m_tiles;
 	bool m_flowFieldOn = false;
 
 	sf::CircleShape m_cursor;
