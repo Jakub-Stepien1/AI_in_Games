@@ -40,6 +40,7 @@ private:
 
 	sf::Vector2f getFormationTarget(sf::Vector2f t_offset, float t_angle);
 	void setFlowFieldCosts();
+	void showFlowFieldPath(Tile* t_startTile, Tile* t_goalTile);
 	
 	void setupTexts();
 	void setupSprites();

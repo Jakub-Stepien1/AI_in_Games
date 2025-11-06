@@ -192,6 +192,9 @@ void Game::update(sf::Time t_deltaTime)
 		m_cursor.setPosition((sf::Vector2f)sf::Mouse::getPosition(m_window));
 		sf::Vector2f cursorPos = m_cursor.getPosition();
 
+		Tile* startTile = nullptr;
+		Tile* goalTile = nullptr;
+
 		for (Tile* tile : m_tiles)
 		{
 			sf::Vector2f tilePos = tile->getPosition();
@@ -230,6 +233,20 @@ void Game::update(sf::Time t_deltaTime)
 					tile->unhover();
 				}
 			}
+
+			if (tile->isGoal())
+			{
+				goalTile = tile;
+			}
+			if (tile->isStart())
+			{
+				startTile = tile;
+			}
+		}
+
+		if (startTile != nullptr && goalTile != nullptr)
+		{
+			showFlowFieldPath(startTile, goalTile);
 		}
 	}
 }
@@ -316,25 +333,69 @@ void Game::setFlowFieldCosts()
 		Tile* current = queue.front();
 		queue.pop();
 
-		for (Tile* neighbor : m_tiles)
+		for (Tile* neighbour : m_tiles)
 		{
-			if (neighbor != current)
+			if (neighbour != current)
 			{
 				sf::Vector2f currentPos = current->getPosition();
-				sf::Vector2f neighborPos = neighbor->getPosition();
-				if (std::abs(currentPos.x - neighborPos.x) <= 16.0f && std::abs(currentPos.y - neighborPos.y) <= 16.0f)
+				sf::Vector2f neighbourPos = neighbour->getPosition();
+				if (std::abs(currentPos.x - neighbourPos.x) <= 16.0f && std::abs(currentPos.y - neighbourPos.y) <= 16.0f)
 				{
 					int newCost = current->getCost() + 1;
-					if (newCost < neighbor->getCost() && !neighbor->isVisited())
+					if (newCost < neighbour->getCost() && !neighbour->isVisited())
 					{
-						neighbor->setCost(newCost);
-						neighbor->setVisited(true);
-						queue.push(neighbor);
+						neighbour->setCost(newCost);
+						neighbour->setVisited(true);
+						queue.push(neighbour);
 					}
 				}
 			}
 		}
 	}
+}
+
+void Game::showFlowFieldPath(Tile* t_startTile, Tile* t_goalTile)
+{
+	if (t_startTile == nullptr || t_goalTile == nullptr)
+	{
+		return;
+	}
+		
+	Tile* currentTile = t_startTile;
+
+	while (currentTile != t_goalTile)
+	{
+		currentTile->setColour(sf::Color(255, 255, 0, 120));
+
+		Tile* nextTile = nullptr;
+		int bestCost = currentTile->getCost();
+
+		sf::Vector2f currentPos = currentTile->getPosition();
+
+		for (Tile* neighbour : m_tiles)
+		{
+			sf::Vector2f neighbourPos = neighbour->getPosition();
+
+			if (std::abs(currentPos.x - neighbourPos.x) <= 16.0f && std::abs(currentPos.y - neighbourPos.y) <= 16.0f
+				&& currentTile != neighbour)
+			{
+				if (neighbour->getCost() < bestCost)
+				{
+					bestCost = neighbour->getCost();
+					nextTile = neighbour;
+				}
+			}
+		}
+
+		if (!nextTile || currentTile == nextTile)
+		{
+			break;
+		}
+
+		currentTile = nextTile;
+	}
+
+	t_goalTile->setColour(sf::Color(255, 0, 0, 120));
 }
 
 /// <summary>

@@ -10,6 +10,7 @@ Tile::Tile(sf::Font& t_font) :
 	m_showCost = false;
 	m_showVector = false;
 	m_visited = false;
+	m_path = false;
 
 	m_shape.setFillColor(sf::Color(0,0,255,70));
 	
@@ -59,7 +60,10 @@ void Tile::hover()
 
 void Tile::unhover()
 {
-	m_shape.setFillColor(sf::Color(0, 0, 255, 70));
+	if (!m_path)
+	{
+		m_shape.setFillColor(sf::Color(0, 0, 255, 70));
+	}
 }
 
 void Tile::setGoal()
@@ -102,6 +106,11 @@ void Tile::showCost()
 {
 	m_showCost = !m_showCost;
 	m_showVector = false;
+}
+
+void Tile::setColour(sf::Color t_color)
+{
+	m_shape.setFillColor(t_color);
 }
 
 int Tile::getCost()

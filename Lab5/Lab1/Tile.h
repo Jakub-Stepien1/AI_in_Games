@@ -23,6 +23,7 @@ public:
 	void setVisited(bool t_visited);
 	void clearTile();
 	void showCost();
+	void setColour(sf::Color t_color);
 
 	int getCost();
 	void setCost(int t_newCost);
@@ -42,6 +43,7 @@ private:
 	bool m_showCost;
 	bool m_showVector;
 	bool m_visited;
+	bool m_path;
 
 	int m_distanceToGoal;
 
