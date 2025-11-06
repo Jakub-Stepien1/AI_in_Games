@@ -206,11 +206,12 @@ void Game::update(sf::Time t_deltaTime)
 						tile->setGoal();
 						for (Tile* otherTile : m_tiles)
 						{
-							if (tile != otherTile && otherTile->isGoal())
+							if (tile != otherTile)
 							{
 								otherTile->clearTile();
 							}
 						}
+						setFlowFieldCosts();
 					}
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
 					{
@@ -287,6 +288,43 @@ sf::Vector2f Game::getFormationTarget(sf::Vector2f t_offset, float t_angle)
 	target.y = t_offset.x * std::sin(angleRad) + t_offset.y * std::cos(angleRad);
 
 	return target;
+}
+
+void Game::setFlowFieldCosts()
+{
+	Tile* goalTile = nullptr;
+	Tile* startTile = nullptr;
+	
+	Tile* leftTile = nullptr;
+	Tile* rightTile = nullptr;
+
+	for (auto it = m_tiles.begin(); it != m_tiles.end();)
+	{
+		Tile* currentTile = (*it);
+		
+		if (currentTile->isGoal())
+		{
+			if (it != m_tiles.begin())
+			{
+				leftTile = *(it - 1);
+			}
+			if (it != m_tiles.end())
+			{
+				rightTile = *(it + 1);
+			}
+
+			if (leftTile != nullptr)
+			{
+				leftTile->setCost(currentTile->getCost());
+			}
+			if (rightTile != nullptr)
+			{
+				rightTile->setCost(currentTile->getCost());
+			}
+		}
+
+		it++;
+	}
 }
 
 /// <summary>

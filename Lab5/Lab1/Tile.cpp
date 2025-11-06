@@ -99,6 +99,7 @@ void Tile::setCost(int t_previousCost)
 	{
 		m_distanceToGoal = t_previousCost + 1;
 	}
+	m_costText.setString(std::to_string(m_distanceToGoal));
 }
 
 void Tile::setPosition(sf::Vector2f t_position)

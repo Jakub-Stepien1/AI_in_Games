@@ -38,6 +38,7 @@ private:
 	void render();
 
 	sf::Vector2f getFormationTarget(sf::Vector2f t_offset, float t_angle);
+	void setFlowFieldCosts();
 	
 	void setupTexts();
 	void setupSprites();
