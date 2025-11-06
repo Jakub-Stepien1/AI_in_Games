@@ -18,6 +18,7 @@
 #include "Npc.h"
 #include "Behaviour.h"
 #include "Tile.h"
+#include <queue>
 
 
 const sf::Color ULTRAMARINE{ 5, 55,242,255 }; // const colour

@@ -293,37 +293,47 @@ sf::Vector2f Game::getFormationTarget(sf::Vector2f t_offset, float t_angle)
 void Game::setFlowFieldCosts()
 {
 	Tile* goalTile = nullptr;
-	Tile* startTile = nullptr;
 	
-	Tile* leftTile = nullptr;
-	Tile* rightTile = nullptr;
-
-	for (auto it = m_tiles.begin(); it != m_tiles.end();)
+	for (Tile* tile : m_tiles)
 	{
-		Tile* currentTile = (*it);
-		
-		if (currentTile->isGoal())
+		if (tile->isGoal())
 		{
-			if (it != m_tiles.begin())
-			{
-				leftTile = *(it - 1);
-			}
-			if (it != m_tiles.end())
-			{
-				rightTile = *(it + 1);
-			}
+			goalTile = tile;
+			break;
+		}
+	}
 
-			if (leftTile != nullptr)
+	if (goalTile == nullptr)
+	{
+		return;
+	}
+
+	std::queue<Tile*> queue;
+	queue.push(goalTile);
+
+	while (!queue.empty())
+	{
+		Tile* current = queue.front();
+		queue.pop();
+
+		for (Tile* neighbor : m_tiles)
+		{
+			if (neighbor != current)
 			{
-				leftTile->setCost(currentTile->getCost());
-			}
-			if (rightTile != nullptr)
-			{
-				rightTile->setCost(currentTile->getCost());
+				sf::Vector2f currentPos = current->getPosition();
+				sf::Vector2f neighborPos = neighbor->getPosition();
+				if (std::abs(currentPos.x - neighborPos.x) <= 16.0f && std::abs(currentPos.y - neighborPos.y) <= 16.0f)
+				{
+					int newCost = current->getCost() + 1;
+					if (newCost < neighbor->getCost() && !neighbor->isVisited())
+					{
+						neighbor->setCost(newCost);
+						neighbor->setVisited(true);
+						queue.push(neighbor);
+					}
+				}
 			}
 		}
-
-		it++;
 	}
 }
 

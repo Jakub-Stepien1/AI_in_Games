@@ -9,6 +9,7 @@ Tile::Tile(sf::Font& t_font) :
 	m_start = false;
 	m_showCost = false;
 	m_showVector = false;
+	m_visited = false;
 
 	m_shape.setFillColor(sf::Color(0,0,255,70));
 	
@@ -46,6 +47,11 @@ bool Tile::isStart()
 	return m_start;
 }
 
+bool Tile::isVisited()
+{
+	return m_visited;
+}
+
 void Tile::hover()
 {
 	m_shape.setFillColor(sf::Color(255, 0, 0, 70));
@@ -73,11 +79,21 @@ void Tile::setStart()
 	m_shape.setFillColor(sf::Color(0, 255, 0, 120));
 }
 
+void Tile::setVisited(bool t_visited)
+{
+	m_visited = t_visited;
+}
+
 void Tile::clearTile()
 {
+	if (m_start == false)
+	{
+		m_distanceToGoal = 999;
+	}
+
 	m_goal = false;
 	m_start = false;
-	m_distanceToGoal = 999;
+	m_visited = false;
 	m_shape.setFillColor(sf::Color(0, 0, 255, 70));
 	m_costText.setString(std::to_string(m_distanceToGoal));
 }
@@ -93,12 +109,9 @@ int Tile::getCost()
 	return m_distanceToGoal;
 }
 
-void Tile::setCost(int t_previousCost)
+void Tile::setCost(int t_newCost)
 {
-	if (t_previousCost != 999 && t_previousCost < m_distanceToGoal)
-	{
-		m_distanceToGoal = t_previousCost + 1;
-	}
+	m_distanceToGoal = t_newCost;
 	m_costText.setString(std::to_string(m_distanceToGoal));
 }
 

@@ -14,16 +14,18 @@ public:
 
 	bool isGoal();
 	bool isStart();
+	bool isVisited();
 
 	void hover();
 	void unhover();
 	void setGoal();
 	void setStart();
+	void setVisited(bool t_visited);
 	void clearTile();
 	void showCost();
 
 	int getCost();
-	void setCost(int t_previousCost);
+	void setCost(int t_newCost);
 
 	void setPosition(sf::Vector2f t_position);
 	sf::Vector2f getPosition();
@@ -39,6 +41,7 @@ private:
 	bool m_start;
 	bool m_showCost;
 	bool m_showVector;
+	bool m_visited;
 
 	int m_distanceToGoal;
 
