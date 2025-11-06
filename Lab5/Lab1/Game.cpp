@@ -104,7 +104,7 @@ void Game::processKeys(const std::optional<sf::Event> t_event)
 		}
 		else
 		{
-			m_gameText.setString("You can go back by pressing 8\nYou can set the start tile by right clicking\nYou can set the goal tile by left clicking\nYou can reset the tiles by pressing 'R'");
+			m_gameText.setString("You can go back by pressing 8\nYou can set the start tile by right clicking\nYou can set the goal tile by left clicking\nYou can reset the tiles by pressing 'R'\nYou can toggle the cost by pressing 'C'");
 		}
 	}
 
@@ -115,6 +115,13 @@ void Game::processKeys(const std::optional<sf::Event> t_event)
 			for (auto& tile : m_tiles)
 			{
 				tile.clearTile();
+			}
+		}
+		if (sf::Keyboard::Key::C == newKeypress->code)
+		{
+			for (auto& tile : m_tiles)
+			{
+				tile.showCost();
 			}
 		}
 	}
@@ -183,10 +190,10 @@ void Game::update(sf::Time t_deltaTime)
 	else // Flowfield on
 	{
 		m_cursor.setPosition((sf::Vector2f)sf::Mouse::getPosition(m_window));
+		sf::Vector2f cursorPos = m_cursor.getPosition();
 
-		for (auto& tile : m_tiles)
+		for (Tile& tile : m_tiles)
 		{
-			sf::Vector2f cursorPos = m_cursor.getPosition();
 			sf::Vector2f tilePos = tile.getPosition();
 			if (!tile.isGoal() && !tile.isStart())
 			{
@@ -197,6 +204,7 @@ void Game::update(sf::Time t_deltaTime)
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
 					{
 						tile.setGoal();
+
 					}
 					if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right))
 					{
@@ -315,7 +323,7 @@ void Game::setupTexts()
 		pos.x = col * 16.0f;
 		pos.y = row * 16.0f;
 
-		Tile newTile;
+		Tile newTile(m_jerseyFont);
 		newTile.setPosition(pos);
 		m_tiles.push_back(newTile);
 

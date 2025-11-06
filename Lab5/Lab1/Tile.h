@@ -7,7 +7,7 @@
 class Tile
 {
 public:
-	Tile();
+	Tile(sf::Font& t_font);
 	~Tile();
 
 	void draw(sf::RenderWindow& t_window);
@@ -20,6 +20,10 @@ public:
 	void setGoal();
 	void setStart();
 	void clearTile();
+	void showCost();
+
+	int getCost();
+	void setCost(int t_previousCost);
 
 	void setPosition(sf::Vector2f t_position);
 	sf::Vector2f getPosition();
@@ -28,11 +32,14 @@ private:
 
 	sf::RectangleShape m_shape;
 
-	bool goal;
-	bool start;
-	bool showCost;
-	bool showVector;
+	sf::Font& m_font;
+	sf::Text m_costText;
 
-	int distanceToGoal;
+	bool m_goal;
+	bool m_start;
+	bool m_showCost;
+	bool m_showVector;
+
+	int m_distanceToGoal;
 
 };
